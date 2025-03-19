@@ -8,7 +8,8 @@ INCLUDES            =   ./includes/
 SRC_DIR             =   ./srcs
 OBJ_DIR             =   $(SRC_DIR)/objs
 
-SRCS                =   $(SRC_DIR)/main_program.c                               \
+SRCS                =   $(SRC_DIR)/main_program.c 		\
+						$(SRC_DIR)/utils.c       		\
 
 OBJS                =   $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
