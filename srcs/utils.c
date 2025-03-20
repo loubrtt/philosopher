@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lobriott <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lobriott <loubriottet@student.42.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:12:32 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/19 16:12:35 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:27:04 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,14 @@ long long int	ft_atoll(char *str)
 		i++;
 	}
 	return (nbr * minus);
+}
+
+long	get_time_in_ms(void)
+{
+	struct timeval	tv;
+	long			ms;
+
+	gettimeofday(&tv, NULL);
+	ms = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	return (ms);
 }
