@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lobriott <loubriottet@student.42.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:12:32 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/24 13:53:38 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/03/24 23:06:41 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,29 @@ long	get_time_in_ms(void)
 	gettimeofday(&tv, NULL);
 	ms = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	return (ms);
+}
+
+int	init_forks(pthread_mutex_t *forks, int nb)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb)
+	{
+		if (pthread_mutex_init(&forks[i], NULL) == 0)
+			i++;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+void	init_philo(t_philo *philo, int i, t_global *data)
+{
+	philo->philo_id = i + 1;
+	philo->data = data;
+	philo->left_fork = &data->forks[i];
+	philo->right_fork = &data->forks[(i + 1) % data->nb_of_philosophers];
+	philo->nb_of_meal = 0;
+	philo->last_meal = data -> time_stamp;
 }
