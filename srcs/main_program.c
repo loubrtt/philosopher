@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_program.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lobriott <loubriottet@student.42.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/24 17:39:33 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/03/24 22:46:16 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ int	parsing_global(t_global *data, char **av)
 			millisecond for sleep as input.\n");
 		data->i = 1;
 	}
-	data->nb_of_time_eating = ft_atoll(av[5]);
+	if (av[5])
+		data->nb_of_time_eating = ft_atoll(av[5]);
+	else
+		data->nb_of_time_eating = -1;
 	if (data->nb_of_time_eating <= 0)
 	{
 		printf("Error: Please provide at least one \
@@ -56,25 +59,42 @@ int	parsing_global(t_global *data, char **av)
 	return (0);
 }
 
+int is_dead(t_philo *philo)
+{
+	int time;
+
+	time = get_time_in_ms();
+	if (time - philo->data->time_stamp >= philo->last_meal - philo->data->time_stamp)
+		return (1);
+	return (0);
+}
+
 void *routine(void *arg)
 {
 	t_philo *philo;
 
 	philo = (t_philo*)arg;
-	if (philo->nb_of_meal == philo->data->nb_of_time_eating)
-		return (NULL);
 	while (!philo->data->someone_died && (philo->nb_of_meal < philo->data->nb_of_time_eating))
 	{
-		printf("Philosophe %d pense ...\n", philo->philo_id);
+		printf("Philosophe %d se reveille et pense ...\n", philo->philo_id);
+		if(is_dead(philo))
+		{
+			printf("philo %d est mort\n", philo->philo_id);
+			break;
+		}
 		pthread_mutex_lock(philo->left_fork);
         pthread_mutex_lock(philo->right_fork);
 		printf("Philo %d mange\n", philo->philo_id);
 		usleep(philo->data->time_to_eat * 1000);
 		philo->nb_of_meal++;
-		printf("philo nb %d nb de repas = %lld\n\n", philo->philo_id, philo->nb_of_meal);
 		philo->last_meal = get_time_in_ms();
 		pthread_mutex_unlock(philo->right_fork);
         pthread_mutex_unlock(philo->left_fork);
+		if (philo->nb_of_meal >= philo->data->nb_of_time_eating && philo->data->nb_of_time_eating != -1)
+		{
+			printf("le philo %d a fini sa routine\n", philo->philo_id);
+			break;
+		}
 		printf("Philo %d dort\n", philo->philo_id);
     	usleep(philo->data->time_to_sleep * 1000);
 	}
