@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lobriott <loubriottet@student.42.fr>       +#+  +:+       +#+        */
+/*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:12:32 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/20 16:27:04 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/03/24 13:53:38 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ long long int	ft_atoll(char *str)
 	nbr = 0;
 	minus = 1;
 	i = 0;
-	while (str[i] > 8 && str[i] < 14 || str[i] == 32)
+	while ((str[i] > 8 && str[i] < 14) || str[i] == 32)
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 	{
