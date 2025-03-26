@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lobriott <loubriottet@student.42.fr>       +#+  +:+       +#+        */
+/*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:12:32 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/24 23:06:41 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/03/26 13:42:53 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+int	return_function(int i)
+{
+	if (i == 1)
+	{
+		printf("Error: Please provide at least");
+		printf(" one philosopher as input.\n");
+	}
+	if (i == 2)
+	{
+		printf("Error: Please provide at least one");
+		printf(" millisecond before dying as input.\n");
+	}
+	if (i == 3)
+	{
+		printf("Error: Please provide at least one");
+		printf(" millisecond for eating as input.\n");
+	}
+	if (i == 4)
+	{
+		printf("Error: Please provide at least one");
+		printf(" millisecond for sleep as input.\n");
+	}
+	return (1);
+}
 
 long long int	ft_atoll(char *str)
 {
