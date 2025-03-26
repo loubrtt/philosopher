@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_program.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lobriott <loubriottet@student.42.fr>       +#+  +:+       +#+        */
+/*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/24 23:39:56 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/03/26 13:40:41 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,6 @@ int	return_function(int i)
 		printf("Error: Please provide at least one");
 		printf(" millisecond for sleep as input.\n");
 	}
-	if (i == 5)
-	{
-		printf("Error: Please provide at least one");
-		printf(" time for eating as input.\n");
-	}	
 	return (1);
 }
 
@@ -64,8 +59,6 @@ int	parsing_global(t_global *data, char **av)
 		data->nb_of_time_eating = ft_atoll(av[5]);
 	else
 		data->nb_of_time_eating = -1;
-	if (data->nb_of_time_eating <= 0)
-		data->i = return_function(5);
 	if (data->i)
 		return (1);
 	return (0);
@@ -73,22 +66,19 @@ int	parsing_global(t_global *data, char **av)
 
 int	is_dead(t_philo *philo)
 {
-	int	time;
+	long long	now;
 
-	time = get_time_in_ms();
-	if (time - philo->data->time_stamp
-		>= philo->last_meal - philo->data->time_stamp)
+	now = get_time_in_ms();
+	if ((now - philo->last_meal) > philo->data->time_to_die)
 		return (1);
 	return (0);
 }
-
-void	*routine(void *arg)
+void	*routine_without_goal(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (!philo->data->someone_died
-		&& (philo->nb_of_meal < philo->data->nb_of_time_eating))
+	while (!philo->data->someone_died)
 	{
 		printf("Philosophe %d se reveille et pense ...\n", philo->philo_id);
 		if (is_dead(philo))
@@ -104,19 +94,52 @@ void	*routine(void *arg)
 		philo->last_meal = get_time_in_ms();
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
-		if (philo->nb_of_meal >= philo->data->nb_of_time_eating
-			&& philo->data->nb_of_time_eating != -1)
-		{
-			printf("le philo %d a fini sa routine\n", philo->philo_id);
-			break ;
-		}
 		printf("Philo %d dort\n", philo->philo_id);
 		usleep(philo->data->time_to_sleep * 1000);
 	}
 	return (NULL);
 }
 
-int	parsing(t_global *data, t_philo *philo, char **av)
+void	*routine(void *arg)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	if (philo->data->nb_of_time_eating != -1)
+	{
+		while (!philo->data->someone_died
+			&& (philo->nb_of_meal < philo->data->nb_of_time_eating))
+		{
+			printf("Philosophe %d se reveille et pense ...\n", philo->philo_id);
+			if (is_dead(philo))
+			{
+				printf("philo %d est mort\n", philo->philo_id);
+				break ;
+			}
+			pthread_mutex_lock(philo->left_fork);
+			pthread_mutex_lock(philo->right_fork);
+			printf("Philo %d mange\n", philo->philo_id);
+			usleep(philo->data->time_to_eat * 1000);
+			philo->nb_of_meal++;
+			philo->last_meal = get_time_in_ms();
+			pthread_mutex_unlock(philo->right_fork);
+			pthread_mutex_unlock(philo->left_fork);
+			if (philo->nb_of_meal >= philo->data->nb_of_time_eating
+				&& philo->data->nb_of_time_eating != -1)
+			{
+				printf("le philo %d a fini sa routine\n", philo->philo_id);
+				break ;
+			}
+			printf("Philo %d dort\n", philo->philo_id);
+			usleep(philo->data->time_to_sleep * 1000);
+		}
+	}
+	else
+		routine_without_goal(arg);
+	return (NULL);
+}
+
+int	parsing(t_global *data, t_philo **philo, char **av)
 {
 	if (parsing_global(data, av))
 		return (1);
@@ -128,15 +151,19 @@ int	parsing(t_global *data, t_philo *philo, char **av)
 		free(data->forks);
 		return (1);
 	}
-	philo = malloc(sizeof(t_philo) * data->nb_of_philosophers);
-	if (!philo)
+	*philo = malloc(sizeof(t_philo) * data->nb_of_philosophers);
+	if (!*philo)
 	{
 		free(data->forks);
 		return (1);
 	}
 	return (0);
 }
-
+void	free_structs(t_global *data, t_philo *philo)
+{
+	free(data->forks);
+	free(philo);
+}
 int	main(int ac, char **av)
 {
 	t_global	data;
@@ -147,7 +174,7 @@ int	main(int ac, char **av)
 	philo = NULL;
 	if (ac == 5 || ac == 6)
 	{
-		if (parsing(&data, philo, av))
+		if (parsing(&data, &philo, av))
 			return (1);
 		while (i < data.nb_of_philosophers)
 		{
@@ -161,6 +188,7 @@ int	main(int ac, char **av)
 			pthread_join(philo[i].thread_id, NULL);
 			i++;
 		}
+		free_structs(&data, philo);
 	}
 	else
 		printf("The program needs 4 or 5 arguments\n");
