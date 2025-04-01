@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:04:21 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/27 18:15:11 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:16:45 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	long long int	nb_of_meal;
 	long long int	last_meal;
 	t_global		*data;
+	int				time;
 }					t_philo;
 
 long long			ft_atoll(char *str);

@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/03/26 13:42:44 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:40:46 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	parsing(t_global *data, t_philo **philo, char **av)
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_of_philosophers);
 	if (!data->forks)
 		return (1);
-	if(init_forks(data->forks, data->nb_of_philosophers))
+	if (init_forks(data->forks, data->nb_of_philosophers))
 	{
 		free(data->forks);
 		return (1);
@@ -69,11 +69,13 @@ int	parsing(t_global *data, t_philo **philo, char **av)
 	}
 	return (0);
 }
+
 void	free_structs(t_global *data, t_philo *philo)
 {
 	free(data->forks);
 	free(philo);
 }
+
 int	main(int ac, char **av)
 {
 	t_global	data;
@@ -99,6 +101,8 @@ int	main(int ac, char **av)
 			i++;
 		}
 		free_structs(&data, philo);
+		if (!data.someone_died)
+			printf("Fin du programme, aucun morts\n");
 	}
 	else
 		printf("The program needs 4 or 5 arguments\n");
