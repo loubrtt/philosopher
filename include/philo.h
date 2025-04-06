@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:04:21 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/01 15:16:45 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:27:09 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,5 @@ int					init_forks(pthread_mutex_t *forks, int nb);
 int					return_function(int i);
 void				*routine(void *arg);
 int					is_dead(t_philo *philo);
+int					what_time(t_philo *philo);
 #endif

@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/01 15:40:46 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:57:04 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,14 @@ int	is_dead(t_philo *philo)
 	long long	now;
 
 	now = get_time_in_ms();
+	printf("%lld last meal \n\n%ld time to die\n\n", (now - philo->last_meal), philo->data->time_to_die);
 	if ((now - philo->last_meal) > philo->data->time_to_die)
+	{
+		printf("%d sec = philo %d est mort\n", what_time(philo),
+			philo->philo_id);
+		philo->data->someone_died++;
 		return (1);
+	}
 	return (0);
 }
 
@@ -102,7 +108,9 @@ int	main(int ac, char **av)
 		}
 		free_structs(&data, philo);
 		if (!data.someone_died)
-			printf("Fin du programme, aucun morts\n");
+			printf("\n\nFin du programme, aucun morts.\n");
+		else
+			printf("\n\nFin du programme, un philo est mort.\n");
 	}
 	else
 		printf("The program needs 4 or 5 arguments\n");
