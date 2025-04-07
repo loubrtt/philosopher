@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:04:21 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/06 19:27:09 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:43:32 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	long long int	nb_of_meal;
 	long long int	last_meal;
 	t_global		*data;
+	int				priority;
 	int				time;
 }					t_philo;
 
@@ -56,4 +57,10 @@ int					return_function(int i);
 void				*routine(void *arg);
 int					is_dead(t_philo *philo);
 int					what_time(t_philo *philo);
+void				eating(t_philo *philo);
+void				sleeping(t_philo *philo);
+void				wake_up(t_philo *philo);
+void				unlocking(t_philo *philo);
+void				locking(t_philo *philo);
+
 #endif

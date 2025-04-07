@@ -11,6 +11,7 @@ OBJ_DIR             =   $(SRC_DIR)/objs
 SRCS                =   $(SRC_DIR)/main_program.c 		\
 						$(SRC_DIR)/utils.c       		\
 						$(SRC_DIR)/routines.c       	\
+						$(SRC_DIR)/routine_utils.c		\
 
 OBJS                =   $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

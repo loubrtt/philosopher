@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/06 19:57:04 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:30:25 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ int	is_dead(t_philo *philo)
 	long long	now;
 
 	now = get_time_in_ms();
-	printf("%lld last meal \n\n%ld time to die\n\n", (now - philo->last_meal), philo->data->time_to_die);
 	if ((now - philo->last_meal) > philo->data->time_to_die)
 	{
-		printf("%d sec = philo %d est mort\n", what_time(philo),
+		printf("%d ms = philo %d est mort\n", what_time(philo),
 			philo->philo_id);
 		philo->data->someone_died++;
 		return (1);
@@ -76,10 +75,19 @@ int	parsing(t_global *data, t_philo **philo, char **av)
 	return (0);
 }
 
-void	free_structs(t_global *data, t_philo *philo)
+void	free_structs(t_global *data, t_philo *philo, int ac)
 {
-	free(data->forks);
-	free(philo);
+	if (ac == 5 || ac == 6)
+	{
+		if (!data->someone_died)
+			printf("\n\nFin du programme, aucun morts.\n");
+		else
+			printf("\n\nFin du programme, un philo est mort.\n");
+		free(data->forks);
+		free(philo);
+	}
+	else
+		printf("The program needs 4 or 5 arguments\n");
 }
 
 int	main(int ac, char **av)
@@ -102,17 +110,8 @@ int	main(int ac, char **av)
 		}
 		i = 0;
 		while (i < data.nb_of_philosophers)
-		{
-			pthread_join(philo[i].thread_id, NULL);
-			i++;
-		}
-		free_structs(&data, philo);
-		if (!data.someone_died)
-			printf("\n\nFin du programme, aucun morts.\n");
-		else
-			printf("\n\nFin du programme, un philo est mort.\n");
+			pthread_join(philo[i++].thread_id, NULL);
+		free_structs(&data, philo, ac);
 	}
-	else
-		printf("The program needs 4 or 5 arguments\n");
 	return (0);
 }
