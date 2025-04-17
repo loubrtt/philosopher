@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/07 16:30:25 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/16 21:40:12 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	parsing_global(t_global *data, char **av)
 		data->nb_of_time_eating = ft_atoll(av[5]);
 	else
 		data->nb_of_time_eating = -1;
+	data->all_philo_eat = 1;
 	if (data->i)
 		return (1);
 	return (0);
@@ -41,14 +42,16 @@ int	parsing_global(t_global *data, char **av)
 
 int	is_dead(t_philo *philo)
 {
-	long long	now;
-
-	now = get_time_in_ms();
-	if ((now - philo->last_meal) > philo->data->time_to_die)
+	if (safe_check_if_philo_died(philo))
 	{
-		printf("%d ms = philo %d est mort\n", what_time(philo),
+		pthread_mutex_lock(&philo->data->print_mutex);
+		printf("%d %d died\n", what_time(philo),
 			philo->philo_id);
+		pthread_mutex_lock(&philo->data->someone_dead_check);
 		philo->data->someone_died++;
+		pthread_mutex_unlock(&philo->data->someone_dead_check);
+		usleep(1000);
+		pthread_mutex_unlock(&philo->data->print_mutex);
 		return (1);
 	}
 	return (0);
@@ -75,19 +78,14 @@ int	parsing(t_global *data, t_philo **philo, char **av)
 	return (0);
 }
 
-void	free_structs(t_global *data, t_philo *philo, int ac)
+void	init_mutexs(t_global *data)
 {
-	if (ac == 5 || ac == 6)
-	{
-		if (!data->someone_died)
-			printf("\n\nFin du programme, aucun morts.\n");
-		else
-			printf("\n\nFin du programme, un philo est mort.\n");
-		free(data->forks);
-		free(philo);
-	}
-	else
-		printf("The program needs 4 or 5 arguments\n");
+	pthread_mutex_init(&data->print_mutex, NULL);
+	pthread_mutex_init(&data->finished_mutex, NULL);
+	pthread_mutex_init(&data->someone_dead, NULL);
+	pthread_mutex_init(&data->eating_mutex, NULL);
+	pthread_mutex_init(&data->someone_dead_check, NULL);
+	pthread_mutex_init(&data->is_philo_dead, NULL);
 }
 
 int	main(int ac, char **av)
@@ -102,6 +100,7 @@ int	main(int ac, char **av)
 	{
 		if (parsing(&data, &philo, av))
 			return (1);
+		init_mutexs(&data);
 		while (i < data.nb_of_philosophers)
 		{
 			init_philo(&philo[i], i, &data);
@@ -109,6 +108,7 @@ int	main(int ac, char **av)
 			i++;
 		}
 		i = 0;
+		usleep(10);
 		while (i < data.nb_of_philosophers)
 			pthread_join(philo[i++].thread_id, NULL);
 		free_structs(&data, philo, ac);

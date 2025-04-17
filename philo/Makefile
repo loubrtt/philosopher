@@ -1,7 +1,7 @@
 NAME                =   philo
 
 CC                  =   gcc
-CFLAGS              =   -Wall -Wextra -Werror -I $(INCLUDES)
+CFLAGS              =   -Wall -Wextra -Werror -g3 -I $(INCLUDES)
 
 INCLUDES            =   ./includes/
 
@@ -12,6 +12,8 @@ SRCS                =   $(SRC_DIR)/main_program.c 		\
 						$(SRC_DIR)/utils.c       		\
 						$(SRC_DIR)/routines.c       	\
 						$(SRC_DIR)/routine_utils.c		\
+						$(SRC_DIR)/end_of_prog_utils.c	\
+						$(SRC_DIR)/safe_checks.c		\
 
 OBJS                =   $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
