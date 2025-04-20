@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:22:56 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/16 19:37:59 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/20 15:47:42 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	safe_check_someone_died(t_global *data)
 {
 	int	val;
 
-	pthread_mutex_lock(&data->someone_dead_check);
+	pthread_mutex_lock(&data->someone_dead);
 	val = data->someone_died;
-	pthread_mutex_unlock(&data->someone_dead_check);
+	pthread_mutex_unlock(&data->someone_dead);
 	return (val);
 }
 

@@ -14,6 +14,7 @@ SRCS                =   $(SRC_DIR)/main_program.c 		\
 						$(SRC_DIR)/routine_utils.c		\
 						$(SRC_DIR)/end_of_prog_utils.c	\
 						$(SRC_DIR)/safe_checks.c		\
+						$(SRC_DIR)/status_utils.c		\
 
 OBJS                =   $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

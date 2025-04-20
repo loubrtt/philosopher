@@ -17,14 +17,8 @@
 
 void	*routine_for_one(t_philo *philo)
 {
-	printf("%d ms = Philo %d se reveille et pense ...\n",
-		what_time(philo), philo->philo_id);
 	usleep(philo->data->time_to_die * 1000);
-	printf("%d ms = Philo %d est mort\n", what_time(philo),
-		philo->philo_id);
-	pthread_mutex_lock(&philo->data->someone_dead);
-	philo->data->someone_died++;
-	pthread_mutex_unlock(&philo->data->someone_dead);
+	print_status(philo, "died");
 	return (NULL);
 }
 

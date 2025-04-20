@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:04:21 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/16 21:40:16 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:54:36 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ void				free_structs(t_global *data, t_philo *philo, int ac);
 int					safe_check_all_philo_eat(t_global *data);
 int					safe_check_if_philo_died(t_philo *philo);
 int					ft_usleep(int time, t_philo *philo);
+int					print_status(t_philo *philo, char *msg);
 
 #endif

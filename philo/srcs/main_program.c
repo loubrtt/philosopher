@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 20:03:16 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/16 21:40:12 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/20 14:59:18 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,7 @@ int	is_dead(t_philo *philo)
 {
 	if (safe_check_if_philo_died(philo))
 	{
-		pthread_mutex_lock(&philo->data->print_mutex);
-		printf("%d %d died\n", what_time(philo),
-			philo->philo_id);
-		pthread_mutex_lock(&philo->data->someone_dead_check);
-		philo->data->someone_died++;
-		pthread_mutex_unlock(&philo->data->someone_dead_check);
-		usleep(1000);
-		pthread_mutex_unlock(&philo->data->print_mutex);
+		print_status(philo, "died");
 		return (1);
 	}
 	return (0);

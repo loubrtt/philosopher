@@ -6,7 +6,7 @@
 /*   By: lobriott <lobriott@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 20:20:53 by lobriott          #+#    #+#             */
-/*   Updated: 2025/04/16 21:39:52 by lobriott         ###   ########.fr       */
+/*   Updated: 2025/04/20 15:12:02 by lobriott         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,4 @@ void	free_structs(t_global *data, t_philo *philo, int ac)
 	}
 	else
 		printf("The program needs 4 or 5 arguments\n");
-}
-
-int	ft_usleep(int time, t_philo *philo)
-{
-	int	elapsed;
-
-	elapsed = 0;
-	while (elapsed < time)
-	{
-		if (is_dead(philo))
-			return (1);
-		usleep(100);
-		elapsed += 100;
-	}
-	return (0);
 }
